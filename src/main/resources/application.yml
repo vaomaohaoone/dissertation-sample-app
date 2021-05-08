@@ -1,0 +1,23 @@
+jaeger.tracer:
+  endpoint: ${JAEGER_ENDPOINT}
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+kafka:
+  request-topic: ${REQUEST_TOPIC}
+  response-topic: ${RESPONSE_TOPIC}
+  producer-id: ${APPLICATION_NAME}
+  consumer-group-id: ${APPLICATION_NAME}
+  bootstrap-servers: ${BOOTSTRAP_SERVERS}
+
+opentracing:
+  jaeger:
+    service-name: ${spring.application.name}
+    enable-b3-propagation: true
+    udp-sender:
+      host: ${JAEGER_HOST}
+      port: ${JAEGER_PORT}
+
+send-delay: ${SEND_DELAY}
+server:
+  port: 8000

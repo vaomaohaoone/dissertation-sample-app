@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-app
+  namespace: sample-app
+spec:
+  selector:
+    matchLabels:
+      run: kafka-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: kafka-app
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: kafka-app
+          image: vaomaohao/kafka-app:4
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+          env:
+            - name: JAEGER_HOST
+              value: "10.102.36.13"
+            - name: JAEGER_PORT
+              value: "14268"
+            - name: JAEGER_ENDPOINT
+              value: "http://jaeger-collector.istio-system.svc:14268/api/traces"
+            - name: APPLICATION_NAME
+              value: "kafka-app-1"
+            - name: REQUEST_TOPIC
+              value: "request-1"
+            - name: RESPONSE_TOPIC
+              value: "response-1"
+            - name: BOOTSTRAP_SERVERS
+              value: "10.98.106.19:9092"
+            - name: SEND_DELAY
+              value: "3000"
